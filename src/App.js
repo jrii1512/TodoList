@@ -1,15 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import axios from 'axios';
 import TodoList from './TodoList';
 import { v4 as uuidv4 } from 'uuid';
-
-const LOCAL_STORAGE_KEY = 'todoApp.todos';
+import { handleChange } from './common';
 
 function App() {
 	const [todos, setTodo] = useState([]);
-	const [newTodos, setNewTodos] = useState([])
+	const [newTodos, setNewTodos] = useState([]);
 	const [status, setStatusUpdate] = useState(false);
 	const todoNameRef = useRef();
 
@@ -27,18 +25,22 @@ function App() {
 		if (name === '') {
 			return;
 		} else {
-			setNewTodos((prev) => [...newTodos, { id: uuidv4(), name: name, complete: false }])
+			setNewTodos({ id: uuidv4(), name: name, complete: false });
 		}
-
 		todoNameRef.current.value = null;
 	};
 
 	const toggleTodo = (id) => {
-		console.log('Toggle checkbox');
+		console.log('Toggle checkbox id:', id);
 		const newTodos = [...todos]; // Create a copy to which you need to make modifications.
 		const todo = newTodos.find((todo) => todo.id === id);
 		todo.complete = !todo.complete;
 		setTodo(newTodos);
+	};
+
+	const handleEventChange = (id, data) => {
+		handleChange(id, data, todos);
+		setStatusUpdate(true);
 	};
 
 	const clearTasks = () => {
@@ -62,28 +64,6 @@ function App() {
 			});
 	};
 
-	const handleChange = (id, complete) => {
-		console.log('id: ', id + ', status:' + complete);
-
-		complete ? (complete = false) : (complete = true);
-		todos.forEach((f) => {
-			if (f.id === id) {
-				axios
-					.patch(`http://localhost:3852/taskit/${id}/`, {
-						complete: complete,
-					})
-					.then((u) => {
-						console.log('Update, checkbox is ', u.data.complete);
-						setStatusUpdate(complete);
-					})
-					.catch((err) => {
-						console.error('Päivitys meni aivan vituiksi');
-					});
-			}
-		});
-	}
-	//			<div>{todos.filter((todo) => !todo.complete).length} left to do</div>
-
 	return (
 		<div className='form'>
 			<input ref={todoNameRef} type='text' />
@@ -91,14 +71,13 @@ function App() {
 			<button onClick={onSubmit}>Tallena</button>
 			<button onClick={clearTasks}>Poista tehdyt</button>
 
-			{
-				<TodoList
-					key={uuidv4()}
-					todos={todos}
-					submit={onSubmit}
-					toggleTodo={handleChange}
-				/>
-			}
+			<TodoList
+				key={uuidv4()}
+				todos={todos}
+				submit={onSubmit}
+				toggleTodo={handleEventChange}
+				taskTypeChange={handleEventChange}
+			/>
 		</div>
 	);
 }
