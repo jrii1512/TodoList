@@ -3,7 +3,7 @@ import './App.css';
 import axios from 'axios';
 import TodoList from './TodoList';
 import { v4 as uuidv4 } from 'uuid';
-import { handleChange } from './common';
+import { handleChange, removeCompletedFromJson } from './common';
 
 function App() {
 	const [todos, setTodo] = useState([]);
@@ -30,6 +30,7 @@ function App() {
 		todoNameRef.current.value = null;
 	};
 
+	/*
 	const toggleTodo = (id) => {
 		console.log('Toggle checkbox id:', id);
 		const newTodos = [...todos]; // Create a copy to which you need to make modifications.
@@ -37,19 +38,29 @@ function App() {
 		todo.complete = !todo.complete;
 		setTodo(newTodos);
 	};
+	*/
 
 	const handleEventChange = (id, data) => {
 		handleChange(id, data, todos);
 		setStatusUpdate(true);
 	};
 
+	//Remove completed tasks from the view and and from the file, from the file only what is completed..
 	const clearTasks = () => {
 		console.log('Poista tehdyt');
 		const newTodos = todos.filter((todo) => !todo.complete);
+		const completedTodos = todos.filter((todo) => todo.complete);
 		console.log('newTodos: ', newTodos);
 		setTodo(newTodos);
-		onSubmit();
+
+		const isDataRemoved = completedTodos.map((i) =>
+			removeCompletedFromJson(i.id)
+		);
+		console.log("remove repsp: ", isDataRemoved)
+
 	};
+
+	//const removeCompleted = (newTodos) => {removeCompletedFromJson(newTodos)}
 
 	const onSubmit = () => {
 		console.log('New todos: ', newTodos);

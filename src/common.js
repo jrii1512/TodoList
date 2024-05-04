@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const handleChange = (id, data, todos) => {
 	console.log('common.js, handleChange id: ', id + ', data:' + data);
-	console.log('todos: ', todos)
+	console.log('todos: ', todos);
 
 	if (typeof data === 'boolean') {
 		data ? (data = false) : (data = true);
@@ -38,4 +38,16 @@ export const handleChange = (id, data, todos) => {
 			}
 		});
 	}
+};
+
+export const removeCompletedFromJson = async (id) => {
+	console.log('Trying to remaining completed tasks: ', id);
+
+	await axios
+		.delete(`http://localhost:3852/taskit/${id}/`, {
+			headers: { 'Content-Type': 'application/json' },
+		})
+		.then((r) => {
+			console.log('delete resp: ', r);
+		});
 };

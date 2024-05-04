@@ -1,12 +1,6 @@
 {
   "taskit": [
     {
-      "id": "d96380e4-04cc-4b5c-b1b5-c93570ea8c8a",
-      "name": "Lämmitä sauna",
-      "type": "duuni",
-      "complete": true
-    },
-    {
       "id": "3231e3dd-6f90-4cc6-9c86-60cae90fb6fb",
       "name": "Tee eväät töihin",
       "type": "duuni",
@@ -16,7 +10,7 @@
       "id": "561e8a0c-0122-4b39-a9fc-80e84726be30",
       "name": "Testaa lisenssiserverin päivitys",
       "type": "duuni",
-      "complete": true
+      "complete": false
     },
     {
       "id": "93f03743-307a-4fc5-b09c-85e238b21985",
