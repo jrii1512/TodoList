@@ -1,9 +1,10 @@
 import axios from 'axios';
+import moment from 'moment';
 
 export const handleChange = (id, data, todos) => {
 	console.log('common.js, handleChange id: ', id + ', data:' + data);
 	console.log('todos: ', todos);
-
+	const today = moment()
 	if (typeof data === 'boolean') {
 		data ? (data = false) : (data = true);
 		console.log('Boolean data: ', data);
@@ -12,6 +13,7 @@ export const handleChange = (id, data, todos) => {
 				axios
 					.patch(`http://localhost:3852/taskit/${id}/`, {
 						complete: !data,
+						updated: today,
 					})
 					.then((u) => {
 						console.log('Update, checkbox is ', u.data.complete);
@@ -23,11 +25,13 @@ export const handleChange = (id, data, todos) => {
 		});
 	} else {
 		console.log('String data: ', data);
+
 		todos.forEach((f) => {
 			if (f.id === id) {
 				axios
 					.patch(`http://localhost:3852/taskit/${id}/`, {
 						type: data,
+						updated: today
 					})
 					.then((u) => {
 						console.log('Update, type is ', u.data.type);

@@ -4,12 +4,15 @@ import axios from 'axios';
 import TodoList from './TodoList';
 import { v4 as uuidv4 } from 'uuid';
 import { handleChange, removeCompletedFromJson } from './common';
+import moment from 'moment';
 
 function App() {
 	const [todos, setTodo] = useState([]);
 	const [newTodos, setNewTodos] = useState([]);
 	const [status, setStatusUpdate] = useState(false);
 	const todoNameRef = useRef();
+
+	const today = moment();
 
 	//Read from the json server
 	useEffect(() => {
@@ -19,26 +22,25 @@ function App() {
 		});
 	}, [status]);
 
-	const addTask = (e) => {
+	const addTask = () => {
 		const name = todoNameRef.current.value;
-		console.log('Todos:', todos);
-		if (name === '') {
+		const newItems = [...todos];
+		newItems.push({
+			id: uuidv4(),
+			name: name,
+			complete: false,
+			due: new Date().toLocaleDateString(),
+		});
+
+		if (name === '' || name === null) {
 			return;
 		} else {
-			setNewTodos({ id: uuidv4(), name: name, complete: false });
+			console.log('Update todos');
+			setTodo(newItems);
 		}
 		todoNameRef.current.value = null;
+		console.log('addTask - funkkarin, todos: ', todos);
 	};
-
-	/*
-	const toggleTodo = (id) => {
-		console.log('Toggle checkbox id:', id);
-		const newTodos = [...todos]; // Create a copy to which you need to make modifications.
-		const todo = newTodos.find((todo) => todo.id === id);
-		todo.complete = !todo.complete;
-		setTodo(newTodos);
-	};
-	*/
 
 	const handleEventChange = (id, data) => {
 		handleChange(id, data, todos);
@@ -51,24 +53,23 @@ function App() {
 		const newTodos = todos.filter((todo) => !todo.complete);
 		const completedTodos = todos.filter((todo) => todo.complete);
 		console.log('newTodos: ', newTodos);
-		setTodo(newTodos);
+		//setTodo(newTodos);
 
 		const isDataRemoved = completedTodos.map((i) =>
 			removeCompletedFromJson(i.id)
 		);
-		console.log("remove repsp: ", isDataRemoved)
-
+		console.log('remove repsp: ', isDataRemoved);
 	};
 
 	//const removeCompleted = (newTodos) => {removeCompletedFromJson(newTodos)}
 
 	const onSubmit = () => {
-		console.log('New todos: ', newTodos);
-		const response = axios
-			.post(`http://localhost:3852/taskit`, newTodos)
+		console.log('New todos: ', todos);
+		axios
+			.post(`http://localhost:3852/taskit`, todos)
 			.then((response) => {
-				console.log('axios post response: ', response.data);
-				setNewTodos(null);
+				console.log('axios post response: ', response);
+				setNewTodos(null); // Tarvitaanko?
 			})
 			.catch((err) => {
 				console.log('Meni aivan vituiksi, error: ', err);
@@ -76,19 +77,23 @@ function App() {
 	};
 
 	return (
-		<div className='form'>
-			<input ref={todoNameRef} type='text' />
-			<button onClick={addTask}>Lisää taski</button>
-			<button onClick={onSubmit}>Tallena</button>
-			<button onClick={clearTasks}>Poista tehdyt</button>
+		<div className='form todo'>
+			<input ref={todoNameRef} type='text' style={{ padding: '10px' }} />
+			<div className='buttonList'>
+				<button onClick={addTask}>Lisää taski</button>
+				<button onClick={clearTasks}>Poista tehdyt</button>
+			</div>
 
-			<TodoList
-				key={uuidv4()}
-				todos={todos}
-				submit={onSubmit}
-				toggleTodo={handleEventChange}
-				taskTypeChange={handleEventChange}
-			/>
+			<div className='section'>
+				{todos.length > 0 && <h3>Taskit</h3>}
+				<TodoList
+					key={uuidv4()}
+					todos={todos}
+					submit={onSubmit}
+					toggleTodo={handleEventChange}
+					taskTypeChange={handleEventChange}
+				/>
+			</div>
 		</div>
 	);
 }

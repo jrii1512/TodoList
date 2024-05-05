@@ -13,6 +13,8 @@
   }
 }
 
+
+
 .form{
   margin-top:10px;
   display: flex;
@@ -38,6 +40,24 @@
 
 .App-link {
   color: #61dafb;
+}
+
+.todo{
+    display: flex;
+    flex-direction: column;
+    margin-top:100px;
+    row-gap: 10px;
+    padding:20px;
+}
+.tasklist{
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+.buttonlist{
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
 }
 
 @keyframes App-logo-spin {
