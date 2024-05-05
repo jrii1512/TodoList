@@ -1,11 +1,19 @@
 {
   "taskit": [
     {
-      "id": "ecaa",
-      "name": "test",
-      "type": "vapaa",
-      "updated": "2024-05-04T15:55:21.204Z",
-      "due":"06-05-2024"
+      "0": {
+        "id": "06318798-4e94-4a4a-a69f-e3466648e87d",
+        "name": "test",
+        "complete": false,
+        "due": "5.5.2024"
+      },
+      "1": {
+        "id": "0a3b7921-736f-4e48-811c-c8430d8481ce",
+        "name": "test2",
+        "complete": false,
+        "due": "5.5.2024"
+      },
+      "id": "80f3"
     }
   ]
 }

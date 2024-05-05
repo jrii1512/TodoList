@@ -16,27 +16,29 @@ function App() {
 
 	//Read from the json server
 	useEffect(() => {
-		axios.get('http://localhost:3852/taskit').then((response) => {
-			console.log('json data: ', response.data);
-			setTodo(response.data);
-		});
+		axios
+			.get('http://localhost:3852/taskit')
+			.then(r => {
+				console.log('json data: ', r)
+				setTodo(r.data)
+			});
 	}, [status]);
 
 	const addTask = () => {
+		console.log('Olemassa olevat taskit: ', todos);
 		const name = todoNameRef.current.value;
-		const newItems = [...todos];
-		newItems.push({
+		const newItem = {
 			id: uuidv4(),
 			name: name,
 			complete: false,
 			due: new Date().toLocaleDateString(),
-		});
+		};
 
 		if (name === '' || name === null) {
 			return;
 		} else {
 			console.log('Update todos');
-			setTodo(newItems);
+			setTodo((prev) => [...prev, newItem]);
 		}
 		todoNameRef.current.value = null;
 		console.log('addTask - funkkarin, todos: ', todos);
@@ -85,15 +87,20 @@ function App() {
 			</div>
 
 			<div className='section'>
-				{todos.length > 0 && <h3>Taskit</h3>}
-				<TodoList
-					key={uuidv4()}
-					todos={todos}
-					submit={onSubmit}
-					toggleTodo={handleEventChange}
-					taskTypeChange={handleEventChange}
-				/>
+				{todos && (
+					<>
+						<h3>Taskit</h3>
+						<TodoList
+							key={uuidv4()}
+							todos={todos}
+							submit={onSubmit}
+							toggleTodo={handleEventChange}
+							taskTypeChange={handleEventChange}
+						/>
+					</>
+				)}
 			</div>
+			<button onClick={onSubmit}>Tallenna</button>
 		</div>
 	);
 }
