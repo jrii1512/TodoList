@@ -54,7 +54,7 @@
   flex-direction: row;
   gap: 10px;
 }
-.buttonlist{
+.buttonlist > button{
   display: flex;
   flex-direction: row;
   gap: 10px;

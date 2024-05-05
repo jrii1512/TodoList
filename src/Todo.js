@@ -3,6 +3,7 @@ import React from 'react';
 export default function Todo({ todo, toggleTodo, taskTypeChange }) {
 	const [selectedOption, setSelectedOption] = React.useState(todo.type || '');
 	const [isComplete, setIsComplete] = React.useState(todo.complete || null);
+	const [dueDate, setDueDate] = React.useState(new Date().toLocaleDateString());
 
 	console.log('todo component: ', todo);
 
@@ -18,8 +19,12 @@ export default function Todo({ todo, toggleTodo, taskTypeChange }) {
 		toggleTodo(todo.id, event.target.checked);
 	};
 
+	const setDate = (event) => {
+		setDueDate(event.target.value);
+	};
+
 	return (
-		<div className="tasklist">
+		<div className='tasklist'>
 			<input
 				name='complete'
 				type='checkbox'
@@ -28,9 +33,12 @@ export default function Todo({ todo, toggleTodo, taskTypeChange }) {
 			/>
 
 			{todo.name}
+
+			<input name='pvm' type='date' value={dueDate} onChange={setDate} />
+
 			<select name='type' value={selectedOption} onChange={handleType}>
-				<option value='duuni'>Duuni</option>
-				<option value='vapaa'>Vapaa-aika</option>
+				<option value='work'>Work</option>
+				<option value='personal'>Personal</option>
 			</select>
 		</div>
 	);
