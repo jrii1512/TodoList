@@ -1,26 +1,3 @@
 {
-  "taskit": [
-    {
-      "id": "bb7b9140-41ac-45bd-b06e-d5a7a4c874f3",
-      "name": "Käy kävelyllä",
-      "type": "personal",
-      "complete": true,
-      "due": "2024-05-10"
-    },
-    {
-      "id": "dc483d1c-9e2f-4b14-bbad-a61f39e6716d",
-      "name": "Mene ulos",
-      "type": "personal",
-      "complete": false,
-      "due": "2024-05-10",
-      "updated": ""
-    },
-    {
-      "id": "5c9a3f31-ca16-4343-9be6-8fd00a413312",
-      "name": "Aloita matkasuunnitelman teko",
-      "type": "personal",
-      "complete": true,
-      "due": "2024-05-10"
-    }
-  ]
+  "taskit": []
 }

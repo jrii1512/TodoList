@@ -13,9 +13,10 @@ function App() {
 	const [selectedOption, setSelectedOption] = useState('personal');
 	const [isComplete, setIsComplete] = useState(false);
 
-	const [editComplete, setEditComplete] = useState(null)
+	const [editComplete, setEditComplete] = useState(null);
 
 	const [dueDate, setDueDate] = useState(new Date().toLocaleDateString());
+	const [editDate, setEditDate] = useState('');
 	const todoNameRef = useRef();
 
 	const today = moment();
@@ -47,26 +48,10 @@ function App() {
 		console.log('todos: ', todos);
 	};
 
-	//const removeCompleted = (newTodos) =>{' '}
-	//{removeCompletedFromJson(newTodos)}
-
+	
 	const handleType = (event) => {
 		console.log('Option: ', event.target.value);
 		setSelectedOption(event.target.value);
-	};
-
-	//Remove completed tasks from the view and and from the file, from the file only what is completed..
-	const clearTasks = () => {
-		console.log('Poista tehdyt');
-		const newTodos = todos.filter((todo) => !todo.complete);
-		const completedTodos = todos.filter((todo) => todo.complete);
-		console.log('newTodos: ', newTodos);
-		setTodo(newTodos);
-
-		const isDataRemoved = completedTodos.map((i) =>
-			removeCompletedFromJson(i.id)
-		);
-		console.log('remove repsp: ', isDataRemoved);
 	};
 
 	const setDate = (event) => {
@@ -81,9 +66,20 @@ function App() {
 			complete: event,
 		});
 		console.log('response:', response);
-		
-		//handleChange(id, event, todos);
 	};
+
+	const editDue = async (id, due) => {
+		console.log(id, due);
+		const response = await axios.patch(`http://localhost:3852/taskit/${id}`, {
+			due: due,
+		});
+		console.log('response:', response);
+	};
+
+	const removeCompletedTask = (id) => {
+		removeCompletedFromJson(id);
+	};
+
 	return (
 		<div className='todo'>
 			<h3>Taskari</h3>
@@ -108,22 +104,30 @@ function App() {
 			</div>
 
 			<div className='section'>
-				<h3>Taskit </h3>
+				{taskit.length > 0 && <h3>Taskit </h3>}
 
 				{taskit.map((t) => (
-					<div key={uuidv4()} className='jsonfile'>
-						<label key={uuidv4()}>{t.name}</label>
+					<>
+						<div key={uuidv4()} className='jsonfile'>
+							<label key={uuidv4()}>{t.name}</label>
 
-						<input
-							key={uuidv4()}
-							type='checkbox'
-							name='editComplete'
-							onChange={(event) => editToggle(t.id, event.target.checked)}
-							checked={editComplete === null ? t.complete : editComplete}
-						/>
+							<input
+								key={uuidv4()}
+								type='checkbox'
+								name='editComplete'
+								onChange={(event) => editToggle(t.id, event.target.checked)}
+								checked={editComplete === null ? t.complete : editComplete}
+							/>
 
-						<label key={uuidv4()}>{t.due}</label>
-					</div>
+							<input
+								type='date'
+								key={uuidv4()}
+								value={t.due}
+								onChange={(event) => editDue(t.id, event.target.value)}
+							/>
+							<button onClick={() => removeCompletedTask(t.id)}>X</button>
+						</div>
+					</>
 				))}
 			</div>
 		</div>
