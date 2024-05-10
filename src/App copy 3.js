@@ -12,9 +12,7 @@ function App() {
 	const [todos, setTodo] = useState([]);
 	const [selectedOption, setSelectedOption] = useState('personal');
 	const [isComplete, setIsComplete] = useState(false);
-
-	const [editComplete, setEditComplete] = useState(null)
-
+	const [editComplete, setEditComplete] = useState(false);
 	const [dueDate, setDueDate] = useState(new Date().toLocaleDateString());
 	const todoNameRef = useRef();
 
@@ -69,20 +67,22 @@ function App() {
 		console.log('remove repsp: ', isDataRemoved);
 	};
 
+	const toggleComplete = (event) => {
+		console.log('complete: ', event.target.checked);
+		setEditComplete(event.target.checked);
+	};
+
 	const setDate = (event) => {
 		console.log('due: ', event.target.value);
 		setDueDate(event.target.value);
 	};
 
 	const editToggle = async (id, event) => {
-		console.log('editToggle: ', id + ', ' + event);
-		setEditComplete(event);
-		const response = await axios.patch(`http://localhost:3852/taskit/${id}`, {
-			complete: event,
+		setIsComplete(event.target.checked);
+		const response = await axios.patch(`http://localhost:3852/${id}`, {
+			complete: isComplete,
 		});
 		console.log('response:', response);
-		
-		//handleChange(id, event, todos);
 	};
 	return (
 		<div className='todo'>
@@ -93,7 +93,7 @@ function App() {
 				name='complete'
 				type='checkbox'
 				checked={isComplete ? true : false}
-				onChange={editToggle}
+				onChange={toggleComplete}
 			/>
 
 			<select name='type' value={selectedOption} onChange={handleType}>
@@ -109,22 +109,29 @@ function App() {
 
 			<div className='section'>
 				<h3>Taskit </h3>
+				<table style={{ padding: '10px', border: '1px solid' }}>
+					<thead>
+						<tr>
+							<th>Taski</th>
+							<th>Status</th>
+							<th>Mennessä</th>
+						</tr>
+					</thead>
 
-				{taskit.map((t) => (
-					<div key={uuidv4()} className='jsonfile'>
-						<label key={uuidv4()}>{t.name}</label>
+					{taskit.map((t) => (
+						<tbody key={t.id}>
+							<tr>
+								<td style={{ marginRight: '10px' }}>{t.name}</td>
 
-						<input
-							key={uuidv4()}
-							type='checkbox'
-							name='editComplete'
-							onChange={(event) => editToggle(t.id, event.target.checked)}
-							checked={editComplete === null ? t.complete : editComplete}
-						/>
+								<td style={{ marginRight: '10px' }} onChange={editToggle}>
+									<nav>{t.complete ? 'tehty' : 'ei tehty'}</nav>
+								</td>
 
-						<label key={uuidv4()}>{t.due}</label>
-					</div>
-				))}
+								<td style={{ marginLeft: '10px' }}>{t.due}</td>
+							</tr>
+						</tbody>
+					))}
+				</table>
 			</div>
 		</div>
 	);

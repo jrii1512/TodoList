@@ -1,16 +1,15 @@
 import React from 'react';
+import { handleChange } from './common';
 
-export default function Todo({ todo, toggleTodo, taskTypeChange }) {
+export default function Todo({ todo, toggleTodo, taskChange }) {
 	const [selectedOption, setSelectedOption] = React.useState(todo.type || '');
 	const [isComplete, setIsComplete] = React.useState(todo.complete || null);
 	const [dueDate, setDueDate] = React.useState(new Date().toLocaleDateString());
 
-	console.log('todo component: ', todo);
-
-	const handleType = (event) => {
+	const handleChange = (event) => {
 		setSelectedOption(event.target.value);
-		console.log('Selected one is: ', event.target.value);
-		taskTypeChange(todo.id, event.target.value);
+		console.log('task data:', todo.id, event.target.value, todo.name, dueDate);
+		taskChange(todo.id, event.target.value, todo.name, dueDate);
 	};
 
 	const toggleComplete = (event) => {
@@ -21,6 +20,7 @@ export default function Todo({ todo, toggleTodo, taskTypeChange }) {
 
 	const setDate = (event) => {
 		setDueDate(event.target.value);
+		todo.due = dueDate;
 	};
 
 	return (
@@ -34,12 +34,12 @@ export default function Todo({ todo, toggleTodo, taskTypeChange }) {
 
 			{todo.name}
 
-			<input name='pvm' type='date' value={dueDate} onChange={setDate} />
-
-			<select name='type' value={selectedOption} onChange={handleType}>
+			<select name='type' value={selectedOption} onChange={handleChange}>
 				<option value='work'>Work</option>
 				<option value='personal'>Personal</option>
 			</select>
+
+			<input name='pvm' type='date' value={dueDate} onChange={setDate} />
 		</div>
 	);
 }

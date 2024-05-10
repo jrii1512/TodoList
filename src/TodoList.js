@@ -1,10 +1,10 @@
 import React from 'react';
 import Todo from './Todo';
 
-export default function TodoList({ todos, toggleTodo, taskTypeChange }) {
+export default function TodoList({ todos, toggleTodo, taskChange }) {
 	console.log('ToddoList.js, todos: ', todos);
-	const typeChange = (id, optionValue) => {
-		taskTypeChange(id, optionValue);
+	const typeChange = (id, optionValue,name, due) => {
+		taskChange(id, optionValue, name, due);
 	};
 
 	const changeTodo = (id, complete, name, due) => {
@@ -20,7 +20,7 @@ export default function TodoList({ todos, toggleTodo, taskTypeChange }) {
 			key={todo.id}
 			todo={todo}
 			toggleTodo={changeTodo}
-			taskTypeChange={typeChange}
+			taskChange={typeChange}
 		/>
 	));
 }
