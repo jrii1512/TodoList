@@ -1,3 +1,18 @@
 {
-  "taskit": []
+  "taskit": [
+    {
+      "id": "aebe9f34-5130-4bd5-8c04-3a993fae48be",
+      "name": "GPS - tagi, vaatteet, pyörän huolto, budjetti, reittisuunnitelma, laivojen varaukset, yöpymiscaset eli pyörät olisi hyvä saada turvaan.",
+      "type": "personal",
+      "complete": true,
+      "due": "2024-05-17"
+    },
+    {
+      "id": "749250f1-c2e7-451e-b636-c30bba00a51a",
+      "name": "Osta mp-rengas onlinesta Michelin Road - 6 renkaat kotariin.",
+      "type": "personal",
+      "complete": true,
+      "due": "2024-05-11"
+    }
+  ]
 }
