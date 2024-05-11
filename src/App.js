@@ -13,15 +13,23 @@ function App() {
 	const [selectedOption, setSelectedOption] = useState('personal');
 
 	const [editComplete, setEditComplete] = useState(null);
-
-	const [dueDate, setDueDate] = useState(new Date().toLocaleDateString());
+	const today = moment();
+	const [dueDate, setDueDate] = useState(getToday());
 	const [editDate, setEditDate] = useState('');
 	const todoNameRef = useRef();
 	let lines = [];
 	let currentLne = '';
-	const today = moment();
 
 	console.log('taskit: ', taskit);
+
+
+function getToday() {
+	const now = new Date();
+	const year = now.getFullYear();
+	const month = String(now.getMonth() + 1).padStart(2, '0');
+	const day = String(now.getDate()).padStart(2, '0');
+	return `${year}-${month}-${day}`;
+}
 
 	const handleTask = async () => {
 		const name = todoNameRef.current.value;
@@ -103,14 +111,35 @@ function App() {
 		return lines.join('\n');
 	}
 
+	const clearTextArea = () => {
+		todoNameRef.current.value = ""
+	}
+
+	const startTimer = () => {
+		setTimeout(clearTextArea, 300000)
+	}
+
 	taskit.forEach((f) => {
 		return f.name.length > 20 ? wrapText(f.name, 20) : f.name;
 	});
+
 	return (
-		<div>
+		<div className='app'>
 			<h3>Taskari</h3>
 			<form className='form'>
-				<input ref={todoNameRef} type='text' style={{ padding: '10px' }} />
+				<select name='type' value={selectedOption} onChange={handleType}>
+					<option value='work'>Duuni</option>
+					<option value='personal'>Oma</option>
+				</select>
+
+				<textarea
+					rows='3'
+					cols='40'
+					ref={todoNameRef}
+					style={{ padding: '10px' }}
+					placeholder='Taski'
+					onFocus={startTimer}
+				/>
 
 				<input name='pvm' type='date' value={dueDate} onChange={setDate} />
 
@@ -123,17 +152,14 @@ function App() {
 				{taskit.length > 0 && <h3>Taskit </h3>}
 
 				<select name='type' value={selectedOption} onChange={handleType}>
-					<option value='work'>Work</option>
-					<option value='personal'>Personal</option>
+					<option value='work'>Duuni</option>
+					<option value='personal'>Oma</option>
 				</select>
 
 				{taskit.map((t) => (
 					<div key={uuidv4()} className='jsonfile'>
 						{t.type === selectedOption && (
 							<>
-								<label>
-									<strong>{t.type}</strong>
-								</label>
 								<p></p>
 								<label>{t.name}</label>
 								<p></p>
@@ -158,7 +184,7 @@ function App() {
 										checked={editComplete === null ? t.complete : editComplete}
 									/>
 									<button
-										style={{ marginLeft:'800px', width: '50px' }}
+										style={{ marginLeft: '800px', width: '50px' }}
 										key={uuidv4()}
 										onClick={() => removeCompletedTask(t.id)}
 									>

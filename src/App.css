@@ -13,18 +13,30 @@
   }
 }
 
-
+.app{
+  border:1px solid;
+  border-radius: 5px;
+  padding: 10px;
+  background-color:darkgrey
+}
 
 .form{
   margin-top:10px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 20px;
   gap:30px;
+}
+.form button{
+  background-color: #61dafb;
+}
+
+.form textarea{
+  width: 400px;
 }
 
 .App-header {
