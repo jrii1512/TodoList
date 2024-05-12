@@ -1,11 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import './App.css';
 import axios from 'axios';
-import TodoList from './TodoList';
 import { v4 as uuidv4 } from 'uuid';
-import { handleChange, removeCompletedFromJson } from './common';
+import { removeCompletedFromJson } from './common';
 import moment from 'moment';
 import JsonData from './todos.json';
+import Taskari from './Taskari';
 
 function App() {
 	let { taskit } = JsonData; //Destruct tasks from the Json file
@@ -26,7 +26,6 @@ function App() {
 
 	console.log('taskit: ', taskit);
 
-
 	function getToday() {
 		const now = new Date();
 		const year = now.getFullYear();
@@ -34,6 +33,11 @@ function App() {
 		const day = String(now.getDate()).padStart(2, '0');
 		return `${year}-${month}-${day}`;
 	}
+
+	const handleType = async (event) => {
+		console.log('App.js handletype option: ', event.target.value);
+		setSelectedOption(event.target.value);
+	};
 
 	const handleTask = async () => {
 		const name = todoNameRef.current.value;
@@ -57,11 +61,6 @@ function App() {
 		}
 		todoNameRef.current.value = null;
 		console.log('todos: ', todos);
-	};
-
-	const handleType = (event) => {
-		console.log('Option: ', event.target.value);
-		setSelectedOption(event.target.value);
 	};
 
 	const setDate = (event) => {
@@ -134,42 +133,28 @@ function App() {
 		setNotCompleted(hoitamattomat);
 	};
 
-
-	const showAll = () => {		
+	const showAll = () => {
 		setNotCompleted(taskit);
 	};
 
-
-
 	return (
 		<div className='app'>
-			<h3>Taskari</h3>
-			<form className='form'>
-				<select name='type' value={selectedOption} onChange={handleType}>
-					<option value='work'>Duuni</option>
-					<option value='personal'>Oma</option>
-				</select>
-
-				<textarea
-					rows='3'
-					cols='40'
-					ref={todoNameRef}
-					style={{ padding: '10px' }}
-					placeholder='Taski'
-					onFocus={startTimer}
-				/>
-
-				<input name='pvm' type='date' value={dueDate} onChange={setDate} />
-
-				<div className='buttonList'>
-					<button onClick={handleTask}>Add a new task</button>
-				</div>
-			</form>
+			<Taskari
+				selected={selectedOption}
+				handleType={handleType}
+				name={todoNameRef}
+				timer={startTimer}
+				due={dueDate}
+				setDate={setDate}
+				task={handleTask}
+			/>
 
 			<div>
 				{taskit.length > 0 && <h3>Taskit </h3>}
-				{taskit.find(({ complete }) => complete === false ) && (
-					<button onClick={showNOK} onDoubleClick={showAll}>Näytä hoitamattomat</button>
+				{taskit.find(({ complete }) => complete === false) && (
+					<button onClick={showNOK} onDoubleClick={showAll}>
+						Näytä hoitamattomat
+					</button>
 				)}
 
 				<select name='type' value={selectedOption} onChange={handleType}>
