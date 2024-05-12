@@ -6,6 +6,7 @@ import { removeCompletedFromJson } from './common';
 import moment from 'moment';
 import JsonData from './todos.json';
 import Taskari from './Taskari';
+import TaskList from './TaskList';
 
 function App() {
 	let { taskit } = JsonData; //Destruct tasks from the Json file
@@ -24,8 +25,6 @@ function App() {
 	let currentLne = '';
 	let hoitamattomat = [];
 
-	console.log('taskit: ', taskit);
-
 	function getToday() {
 		const now = new Date();
 		const year = now.getFullYear();
@@ -35,14 +34,12 @@ function App() {
 	}
 
 	const handleType = async (event) => {
-		console.log('App.js handletype option: ', event.target.value);
 		setSelectedOption(event.target.value);
 	};
 
 	const handleTask = async () => {
 		const name = todoNameRef.current.value;
 		if (name === '' || name === null) {
-			console.log('name is empty');
 		} else {
 			const newItem = {
 				id: uuidv4(),
@@ -55,35 +52,28 @@ function App() {
 				`http://localhost:3852/taskit`,
 				newItem
 			);
-			console.log('post response: ', response);
-			console.log('Objecti: ', newItem);
+
 			setTodo(newItem);
 		}
 		todoNameRef.current.value = null;
-		console.log('todos: ', todos);
 	};
 
 	const setDate = (event) => {
-		console.log('due: ', event.target.value);
 		setDueDate(event.target.value);
 	};
 
 	const editToggle = async (id, event) => {
-		console.log('editToggle: ', id + ', ' + event);
-
 		const response = await axios.patch(`http://localhost:3852/taskit/${id}`, {
 			complete: event,
 		});
-		console.log('response:', response);
+
 		window.location.reload();
 	};
 
 	const editDue = async (id, due) => {
-		console.log(id, due);
 		const response = await axios.patch(`http://localhost:3852/taskit/${id}`, {
 			due: due,
 		});
-		console.log('response:', response);
 	};
 
 	const removeCompletedTask = (id) => {
@@ -92,15 +82,12 @@ function App() {
 
 	//Not in use
 	function wrapText(text, width) {
-		console.log('wrap start text ', text + ', ' + width);
 		const words = text.split(',');
 		let currentLine = '';
 
 		words.forEach((word) => {
-			console.log(word);
 			if (currentLine.length + word.length <= width) {
 				currentLine += (currentLine ? ' ' : '') + word;
-				console.log('currentLine: ', currentLine);
 			} else {
 				lines.push(currentLine);
 				currentLine = word;
@@ -111,7 +98,6 @@ function App() {
 			lines.push(currentLine);
 		}
 
-		console.log('wrap end, lines: ', lines);
 		return lines.join('\n');
 	}
 
@@ -129,7 +115,7 @@ function App() {
 
 	const showNOK = () => {
 		hoitamattomat = taskit.filter((a) => !a.complete);
-		console.log('showNOK: ', hoitamattomat);
+
 		setNotCompleted(hoitamattomat);
 	};
 
@@ -149,92 +135,17 @@ function App() {
 				task={handleTask}
 			/>
 
-			<div>
-				{taskit.length > 0 && <h3>Taskit </h3>}
-				{taskit.find(({ complete }) => complete === false) && (
-					<button onClick={showNOK} onDoubleClick={showAll}>
-						Näytä hoitamattomat
-					</button>
-				)}
-
-				<select name='type' value={selectedOption} onChange={handleType}>
-					<option value='work'>Duuni</option>
-					<option value='personal'>Oma</option>
-				</select>
-
-				{!notCompleted
-					? taskit.map((t) => (
-							<div key={uuidv4()} className='jsonfile'>
-								{t.type === selectedOption && (
-									<>
-										<p></p>
-										<label>{t.name}</label>
-										<p></p>
-										<label>
-											Deadline
-											<input
-												style={{ marginLeft: '5px' }}
-												type='date'
-												key={uuidv4()}
-												value={t.due}
-												onChange={(event) => editDue(t.id, event.target.value)}
-											/>
-										</label>
-										<p></p>
-
-										<label>
-											Hoidettu
-											<input
-												key={uuidv4()}
-												type='checkbox'
-												name='editComplete'
-												onChange={(event) =>
-													editToggle(t.id, event.target.checked)
-												}
-												checked={t.complete}
-											/>
-										</label>
-
-										<button
-											style={{ marginLeft: '800px', width: '50px' }}
-											key={uuidv4()}
-											onClick={() => removeCompletedTask(t.id)}
-										>
-											X
-										</button>
-									</>
-								)}
-							</div>
-					  ))
-					: notCompleted.map((h) => (
-							<div key={uuidv4()} className='jsonfile'>
-								<p></p>
-								<label>{h.name}</label>
-								<p></p>
-								<label>
-									Hoidettu
-									<input
-										key={uuidv4()}
-										type='checkbox'
-										name='editComplete'
-										onChange={(event) => editToggle(h.id, event.target.checked)}
-										checked={h.complete}
-									/>
-								</label>
-
-								<label>
-									Deadline
-									<input
-										style={{ marginLeft: '5px' }}
-										type='date'
-										key={uuidv4()}
-										value={h.due}
-										onChange={(event) => editDue(h.id, event.target.value)}
-									/>
-								</label>
-							</div>
-					  ))}
-			</div>
+			<TaskList
+				taskit={taskit}
+				showNOK={showNOK}
+				showAll={showAll}
+				handleType={handleType}
+				notCompleted={notCompleted}
+				selectedOption={selectedOption}
+				editDue={editDue}
+				editToggle={editToggle}
+				removeCompletedTask={removeCompletedTask}
+			/>
 		</div>
 	);
 }
