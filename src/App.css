@@ -56,10 +56,14 @@
 
 .jsonfile {
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: auto;
   padding: 10px;
   margin-bottom: 10px;
   border: 1px solid;
+}
+
+.jsonfile button {
+  background-color: #61dafb;
 }
 
 
