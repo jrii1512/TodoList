@@ -22,18 +22,17 @@
       "complete": true
     },
     {
-      "id": "69348e20-dfea-4bad-ab0e-dae4076ef99a",
-      "name": "Tsekkaa moottoripyörän renkaanvaihto? Ilkka vai joku muu.. ",
-      "type": "personal",
-      "due": "2024-05-12",
-      "complete": false
-    },
-    {
       "id": "f058a961-d578-448f-be73-863a17ce5d6a",
       "name": "Laita the dominator takaisin kun ei vaikuta air temp failure sanomaan.",
       "type": "personal",
       "due": "2024-05-12",
       "complete": true
+    },
+    {
+      "id": "ee44b060-4f77-45cf-8132-57fd6ab9ab4e",
+      "name": "Missä voisi suorittaa moottoripyörän renkaiden vaihdon  alta alle ?",
+      "type": "personal",
+      "due": "2024-05-17"
     }
   ]
 }

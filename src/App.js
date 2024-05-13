@@ -46,6 +46,7 @@ function App() {
 				name: name,
 				type: selectedOption,
 				due: dueDate,
+				created: new Date().toLocaleDateString()
 			};
 
 			const response = await axios.post(

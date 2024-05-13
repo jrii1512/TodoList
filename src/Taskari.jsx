@@ -14,7 +14,7 @@ export default function Taskari({selected, handleType, name, timer, due, setDate
 
      
   return (
-		<div>
+		<div className='form'>
 			<h3>Taskari</h3>
 			<form className='form'>
 				<select name='type' value={selected} onChange={handleType}>
