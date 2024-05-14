@@ -17,11 +17,12 @@
   border:1px solid;
   border-radius: 5px;
   padding: 10px;
-  background-color:darkgrey
+  background-color:rgb(175, 169, 169)
 }
 
 .form{
   margin-top:10px;
+  background-color: antiquewhite;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -58,12 +59,15 @@
   display: grid;
   grid-template-columns: auto;
   padding-left: 15px;
+  margin-top:5px;
   margin-bottom: 10px;
   border: 1px solid;
 }
 
 .tasklist--button {
   background-color: #61dafb;
+  margin-bottom:10px;
+  row-gap:10px;
 }
 
 .tasklist2{

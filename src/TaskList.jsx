@@ -1,6 +1,6 @@
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import './App.css'
+import './App.css';
 export default function TaskList({
 	taskit,
 	showNOK,
@@ -21,13 +21,13 @@ export default function TaskList({
 					<option value='work'>Duuni</option>
 					<option value='personal'>Oma</option>
 				</select>
-			</div>
 
-			{taskit.find(({ complete }) => complete === false) && (
-				<button onClick={showNOK} onDoubleClick={showAll}>
-					Hoidetut / hoitamattomat
-				</button>
-			)}
+				{taskit.find(({ complete }) => complete === false) && (
+					<button onClick={showNOK} onDoubleClick={showAll}>
+						Hoidetut / hoitamattomat
+					</button>
+				)}
+			</div>
 
 			{!notCompleted
 				? taskit.map((t) => (
@@ -77,9 +77,8 @@ export default function TaskList({
 				  ))
 				: notCompleted.map((h) => (
 						<div key={uuidv4()} className='tasklist'>
-							<p></p>
 							<label>{h.name}</label>
-							<p></p>
+
 							<label>
 								Hoidettu
 								<input
